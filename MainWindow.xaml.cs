@@ -312,10 +312,7 @@ public partial class MainWindow : Window, INotifyPropertyChanged
 
         _bossModeActive = true;
         BossModeText = $"\u5DF2\u9690\u85CF {_hiddenWindows.Count} \u4E2A\u7A97\u53E3";
-        StatusText = "\u76EE\u6807\u7A97\u53E3\u5DF2\u9690\u85CF\uFF0C\u672C\u7A0B\u5E8F\u4E3B\u7A97\u53E3\u548C\u6258\u76D8\u56FE\u6807\u4E5F\u5DF2\u6536\u8D77\u3002";
-
-        _notifyIcon.Visible = false;
-        Hide();
+        StatusText = "\u76EE\u6807\u7A97\u53E3\u5DF2\u9690\u85CF\uFF0C\u672C\u7A0B\u5E8F\u4F1A\u4FDD\u6301\u663E\u793A\u3002";
     }
 
     private void RestoreTargets()
@@ -329,8 +326,6 @@ public partial class MainWindow : Window, INotifyPropertyChanged
         _hiddenWindows.Clear();
         _bossModeActive = false;
         BossModeText = "\u672A\u9690\u85CF";
-        _notifyIcon.Visible = true;
-        ShowMainWindow();
         StatusText = $"\u5DF2\u6062\u590D {restoredCount} \u4E2A\u7A97\u53E3\u3002";
     }
 

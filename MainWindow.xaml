@@ -516,7 +516,7 @@
                         <TextBlock TextWrapping="Wrap"
                                    FontSize="12"
                                    Foreground="#715B1B"
-                                   Text="&#x6309;&#x4E0B;&#x8001;&#x677F;&#x952E;&#x65F6;&#xFF0C;&#x76EE;&#x6807;&#x7A97;&#x53E3;&#x3001;&#x672C;&#x7A0B;&#x5E8F;&#x4E3B;&#x7A97;&#x53E3;&#x548C;&#x6258;&#x76D8;&#x56FE;&#x6807;&#x4F1A;&#x540C;&#x6B65;&#x9690;&#x85CF;&#x6216;&#x6062;&#x590D;&#x3002;" />
+                                   Text="&#x8001;&#x677F;&#x952E;&#x53EA;&#x9690;&#x85CF;&#x6216;&#x6062;&#x590D;&#x76EE;&#x6807;&#x7A97;&#x53E3;&#x3002;&#x9690;&#x85CF;&#x81EA;&#x8EAB;&#x5FEB;&#x6377;&#x952E;&#x4EC5;&#x5F71;&#x54CD;&#x672C;&#x7A0B;&#x5E8F;&#x81EA;&#x8EAB;&#x3002;" />
                     </Border>
                 </Grid>
             </Border>
