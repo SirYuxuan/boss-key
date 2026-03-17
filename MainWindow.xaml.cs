@@ -275,14 +275,14 @@ public partial class MainWindow : Window, INotifyPropertyChanged
 
     private void ToggleBossMode()
     {
-        if (_bossModeActive)
-        {
-            RestoreTargets();
-            return;
-        }
-
         var selectedProcessNames = SavedProcessItems.Select(item => item.ProcessName).ToHashSet(StringComparer.OrdinalIgnoreCase);
         var selectedTitles = SavedWindowItems.Select(item => item.Title).ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        if (_bossModeActive || HasHiddenTargets(selectedProcessNames, selectedTitles))
+        {
+            RestoreTargets(selectedProcessNames, selectedTitles);
+            return;
+        }
 
         if (selectedProcessNames.Count == 0 && selectedTitles.Count == 0)
         {
@@ -315,18 +315,32 @@ public partial class MainWindow : Window, INotifyPropertyChanged
         StatusText = "\u76EE\u6807\u7A97\u53E3\u5DF2\u9690\u85CF\uFF0C\u672C\u7A0B\u5E8F\u4F1A\u4FDD\u6301\u663E\u793A\u3002";
     }
 
-    private void RestoreTargets()
+    private void RestoreTargets(HashSet<string> selectedProcessNames, HashSet<string> selectedTitles)
     {
-        foreach (var handle in _hiddenWindows.Keys.ToList())
+        var targets = _hiddenWindows.Values.ToList();
+        if (targets.Count == 0)
         {
-            WindowScanner.RestoreWindow(handle);
+            targets = WindowScanner.GetAllWindows(Process.GetCurrentProcess().Id)
+                .Where(window =>
+                    (selectedProcessNames.Contains(window.ProcessName) || selectedTitles.Contains(window.Title)) &&
+                    !WindowScanner.IsVisible(window.Handle))
+                .GroupBy(window => window.Handle)
+                .Select(group => group.First())
+                .ToList();
         }
 
-        int restoredCount = _hiddenWindows.Count;
+        foreach (var target in targets)
+        {
+            WindowScanner.RestoreWindow(target.Handle);
+        }
+
+        int restoredCount = targets.Count;
         _hiddenWindows.Clear();
         _bossModeActive = false;
         BossModeText = "\u672A\u9690\u85CF";
-        StatusText = $"\u5DF2\u6062\u590D {restoredCount} \u4E2A\u7A97\u53E3\u3002";
+        StatusText = restoredCount > 0
+            ? $"\u5DF2\u6062\u590D {restoredCount} \u4E2A\u7A97\u53E3\u3002"
+            : "\u6CA1\u6709\u627E\u5230\u53EF\u6062\u590D\u7684\u5DF2\u9690\u85CF\u7A97\u53E3\u3002";
     }
 
     private void ShowMainWindow()
@@ -526,6 +540,24 @@ public partial class MainWindow : Window, INotifyPropertyChanged
             .ToList();
 
         SettingsStore.Save(_settings);
+    }
+
+    private bool HasHiddenTargets(HashSet<string> selectedProcessNames, HashSet<string> selectedTitles)
+    {
+        if (_hiddenWindows.Count > 0)
+        {
+            return true;
+        }
+
+        if (selectedProcessNames.Count == 0 && selectedTitles.Count == 0)
+        {
+            return false;
+        }
+
+        return WindowScanner.GetAllWindows(Process.GetCurrentProcess().Id)
+            .Any(window =>
+                (selectedProcessNames.Contains(window.ProcessName) || selectedTitles.Contains(window.Title)) &&
+                !WindowScanner.IsVisible(window.Handle));
     }
 
     private bool TryRegisterHotKeys()

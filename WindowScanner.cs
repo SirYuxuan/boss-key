@@ -9,11 +9,32 @@ public static class WindowScanner
 {
     public static IReadOnlyList<WindowSnapshot> GetVisibleWindows(int ignoredProcessId)
     {
+        return GetWindows(ignoredProcessId, visibleOnly: true);
+    }
+
+    public static IReadOnlyList<WindowSnapshot> GetAllWindows(int ignoredProcessId)
+    {
+        return GetWindows(ignoredProcessId, visibleOnly: false);
+    }
+
+    public static bool IsVisible(nint handle)
+    {
+        return handle != nint.Zero && IsWindowVisible(handle);
+    }
+
+    private static IReadOnlyList<WindowSnapshot> GetWindows(int ignoredProcessId, bool visibleOnly)
+    {
         var snapshots = new List<WindowSnapshot>();
 
         EnumWindows((handle, lParam) =>
         {
-            if (handle == nint.Zero || !IsWindowVisible(handle))
+            if (handle == nint.Zero)
+            {
+                return true;
+            }
+
+            bool isVisible = IsWindowVisible(handle);
+            if (visibleOnly && !isVisible)
             {
                 return true;
             }
