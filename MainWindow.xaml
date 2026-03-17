@@ -37,6 +37,7 @@
         </Style>
 
         <Style x:Key="GridTextStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#18212F" />
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="TextTrimming" Value="CharacterEllipsis" />
             <Style.Triggers>
@@ -47,9 +48,13 @@
                     </MultiDataTrigger.Conditions>
                     <Setter Property="Foreground" Value="White" />
                 </MultiDataTrigger>
-                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=IsSelected}" Value="True">
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=IsSelected}" Value="True" />
+                        <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=(Selector.IsSelectionActive)}" Value="False" />
+                    </MultiDataTrigger.Conditions>
                     <Setter Property="Foreground" Value="#18212F" />
-                </DataTrigger>
+                </MultiDataTrigger>
             </Style.Triggers>
         </Style>
 
