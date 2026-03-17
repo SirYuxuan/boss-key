@@ -1,45 +1,43 @@
 # BossKey
 
-A simple WPF boss-key utility for Windows.
+`BossKey` 是一个基于 WPF 的 Windows 老板键工具，适合按进程名或窗口标题快速隐藏目标窗口。
 
-## Features
+## 功能特性
 
-- Save targets by process name
-- Save targets by window title
-- Double-click source lists to add saved targets
-- Double-click saved lists to remove targets
-- Two global hotkeys
-- Boss hotkey: hide or restore target windows only
-- Self-hide hotkey: hide or restore the BossKey app itself
-- Settings are persisted and restored after restart
+- 按软件名称保存隐藏目标
+- 按窗口标题保存隐藏目标
+- 双击来源列表，加入保存列表
+- 双击保存列表，移除已保存目标
+- 支持两个全局快捷键
+- 老板键：仅隐藏或恢复目标窗口
+- 隐藏自身快捷键：仅隐藏或恢复 BossKey 本身
+- 设置自动保存，程序重启后自动恢复
 
-## Usage
+## 使用方式
 
-1. Start the app.
-2. Double-click items in the source lists to add them to the saved lists.
-3. Capture and save the boss hotkey and self-hide hotkey on the right panel.
-4. Press the boss hotkey to hide or restore the saved target windows.
-5. Press the self-hide hotkey to hide or restore the app itself.
+1. 启动程序。
+2. 在左侧两个来源列表中双击目标项，将其加入保存列表。
+3. 在右侧分别录入并保存“老板键”和“隐藏自身快捷键”。
+4. 按下老板键后，会隐藏或恢复保存列表中的目标窗口。
+5. 按下隐藏自身快捷键后，只会隐藏或恢复程序本身。
 
-## Development
-
-Requirements:
+## 开发环境
 
 - Windows
 - .NET 10 SDK
 
-Build:
+## 构建
 
 ```powershell
 dotnet build
 ```
 
-Run:
+## 运行
 
 ```powershell
 dotnet run
 ```
 
-## License
+## 许可证
 
-MIT, see [LICENSE](LICENSE).
+本项目使用 MIT License，详见 [LICENSE](LICENSE)。

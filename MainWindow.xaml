@@ -40,8 +40,15 @@
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="TextTrimming" Value="CharacterEllipsis" />
             <Style.Triggers>
-                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=IsSelected}" Value="True">
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=IsSelected}" Value="True" />
+                        <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=(Selector.IsSelectionActive)}" Value="True" />
+                    </MultiDataTrigger.Conditions>
                     <Setter Property="Foreground" Value="White" />
+                </MultiDataTrigger>
+                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=IsSelected}" Value="True">
+                    <Setter Property="Foreground" Value="#18212F" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
@@ -147,6 +154,13 @@
                 <Trigger Property="IsSelected" Value="True">
                     <Setter Property="Background" Value="#EAF2FF" />
                 </Trigger>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsSelected" Value="True" />
+                        <Condition Property="Selector.IsSelectionActive" Value="True" />
+                    </MultiTrigger.Conditions>
+                    <Setter Property="Background" Value="#2C5BDE" />
+                </MultiTrigger>
             </Style.Triggers>
         </Style>
 

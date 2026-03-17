@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
@@ -8,16 +9,18 @@ namespace BossKey;
 public sealed class HotKeyManager : IDisposable
 {
     private const int WmHotKey = 0x0312;
+    private static int _nextHotKeyId;
 
     private readonly Window _window;
     private readonly HwndSourceHook _hook;
+    private readonly int _hotKeyId;
     private HwndSource? _source;
-    private int _currentHotKeyId;
 
     public HotKeyManager(Window window)
     {
         _window = window;
         _hook = WndProc;
+        _hotKeyId = Interlocked.Increment(ref _nextHotKeyId);
     }
 
     public event EventHandler? HotKeyPressed;
@@ -36,16 +39,14 @@ public sealed class HotKeyManager : IDisposable
         }
 
         Unregister();
-        _currentHotKeyId = GetHashCode();
-        return RegisterHotKey(handle, _currentHotKeyId, (uint)modifiers, (uint)KeyInterop.VirtualKeyFromKey(key));
+        return RegisterHotKey(handle, _hotKeyId, (uint)modifiers, (uint)KeyInterop.VirtualKeyFromKey(key));
     }
 
     public void Unregister()
     {
-        if (_source?.Handle is nint handle && handle != nint.Zero && _currentHotKeyId != 0)
+        if (_source?.Handle is nint handle && handle != nint.Zero)
         {
-            _ = UnregisterHotKey(handle, _currentHotKeyId);
-            _currentHotKeyId = 0;
+            _ = UnregisterHotKey(handle, _hotKeyId);
         }
     }
 
@@ -57,7 +58,7 @@ public sealed class HotKeyManager : IDisposable
 
     private nint WndProc(nint hwnd, int msg, nint wParam, nint lParam, ref bool handled)
     {
-        if (msg == WmHotKey && wParam.ToInt32() == _currentHotKeyId)
+        if (msg == WmHotKey && wParam.ToInt32() == _hotKeyId)
         {
             HotKeyPressed?.Invoke(this, EventArgs.Empty);
             handled = true;
